@@ -1,6 +1,2 @@
-int PlayGrid[18][30];
-
-void draw_grid();
-bool move_cown();
-void add_targets();
-int play_game();
+int play_game(SDL_Renderer *renderer,
+        int width, int height, int *pscore);
