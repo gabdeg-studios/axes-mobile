@@ -1,0 +1,10 @@
+*.properties
+*.apk
+proguard-project.txt
+jni/SDL
+jni/SDL_ttf
+gen/
+libs/
+obj/
+bin/
+
