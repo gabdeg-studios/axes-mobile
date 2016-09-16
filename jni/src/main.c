@@ -39,14 +39,19 @@ int main(int argc, char *argv[]) {
     SDL_RWops    *file;
     SDL_Surface  *logoSrfc;
     SDL_Texture  *logoTxtr;
+    SDL_Texture  *gabdeg;
 
     SDL_CreateWindowAndRenderer(720, 1200, 0, &window, &renderer);
     SDL_GetWindowSize(window, &width, &height);
     font = TTF_OpenFont("font.ttf", height / 20);
+
     file = SDL_RWFromFile("score.dat", "r");
 
     logoSrfc = SDL_LoadBMP("logo.bmp");
     logoTxtr = SDL_CreateTextureFromSurface(renderer, logoSrfc);
+    SDL_FreeSurface(logoSrfc);
+    logoSrfc = SDL_LoadBMP("gabdeg.bmp");
+    gabdeg   = SDL_CreateTextureFromSurface(renderer, logoSrfc);
     SDL_FreeSurface(logoSrfc);
 
     while (!font) {
@@ -55,10 +60,20 @@ int main(int argc, char *argv[]) {
         SDL_RenderPresent(renderer);
     }
     if (font) {
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
+
+        SDL_Rect dstRect;
+        dstRect.x = 0;
+        dstRect.y = (height - (int)((float)width * 0.1368)) / 2;
+        dstRect.w = width;
+        dstRect.h = (int)((float)width * 0.1368);
+        SDL_RenderCopy(renderer, gabdeg, NULL, &dstRect);
+
         SDL_RenderPresent(renderer);
-        frame_limit(1);
+        SDL_Delay(1500);
+
+        SDL_DestroyTexture(gabdeg);
     }
 
     //0 = quit
