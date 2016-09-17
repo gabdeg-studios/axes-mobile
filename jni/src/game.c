@@ -140,8 +140,8 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
             markRect.w = 2;
             markRect.h = height;
             if (triggered) {
-                if (trigPos > width - 2) {
-                    trigPos = width - 2;
+                if (trigPos > (bW * 18) - 2) {
+                    trigPos = (bW * 18) - 2;
                 }
                 xTrigPos = trigPos;
                 xC = trigPos - (trigPos % bW);
