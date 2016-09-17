@@ -9,10 +9,11 @@
 #include "game.h"
 #include "menu.h"
 
-unsigned int LastTicks;
+//unsigned int LastTicks;
 int width;
 int height;
 
+/*
 void frame_limit(int limit) {
     float minTicks, diffTicks;
     unsigned int sinceTicks;
@@ -26,6 +27,7 @@ void frame_limit(int limit) {
     }
     LastTicks = SDL_GetTicks();
 }
+*/
 
 
 int main(int argc, char *argv[]) {
@@ -41,7 +43,19 @@ int main(int argc, char *argv[]) {
     SDL_Texture  *logoTxtr;
     SDL_Texture  *gabdeg;
 
-    SDL_CreateWindowAndRenderer(720, 1200, 0, &window, &renderer);
+    window = SDL_CreateWindow(
+            "Axes",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            0,
+            0,
+            SDL_WINDOW_SHOWN
+            );
+    renderer = SDL_CreateRenderer(
+            window,
+            -1,
+            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+            );
     SDL_GetWindowSize(window, &width, &height);
     font = TTF_OpenFont("font.ttf", height / 20);
 
@@ -89,7 +103,7 @@ int main(int argc, char *argv[]) {
     SDL_RWclose(file);
     hscore = atoi(hsBuf);
 
-    LastTicks = SDL_GetTicks();
+    //LastTicks = SDL_GetTicks();
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {}
@@ -97,7 +111,6 @@ int main(int argc, char *argv[]) {
     while (state > 0) {
         if (state == 2) {
             state = play_game(renderer, width, height, &score);
-            frame_limit(60);
         } else if (state == 1) {
             if (score > hscore) {
                 hscore = score;
@@ -108,7 +121,7 @@ int main(int argc, char *argv[]) {
                 SDL_RWclose(file);
             }
             state = do_menu(renderer, font, logoTxtr, width, height, &score, hscore);
-            frame_limit(30);
+            SDL_Delay(30);
         }
     }
     exit(0);
