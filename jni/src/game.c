@@ -163,10 +163,10 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
             markRect.w = width;
             markRect.h = 2;
             if (triggered) {
-                if (trigPos < 2) {
-                    trigPos = 2;
+                if (trigPos < height - (bW * 30)) {
+                    trigPos = height - (bW * 30);
                 }
-                trigPos = trigPos - (height - (bW * 30));
+                trigPos -= height - (bW * 30);
                 yC = trigPos + (bW - (trigPos % bW));
                 hasShotY = true;
                 trigPos = 0 - 2 * step;
