@@ -146,7 +146,8 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
                 xTrigPos = trigPos;
                 xC = trigPos - (trigPos % bW);
                 hasShotX = true;
-                trigPos = height - (bW * 30);
+                trigPos = height - (bW * 30) - step;
+                trigDir = step;
                 triggered = false;
             }
             if (trigPos <= 0) {
@@ -169,6 +170,7 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
                 yC = trigPos + (bW - (trigPos % bW));
                 hasShotY = true;
                 trigPos = 0 - 2 * step;
+                trigDir = step;
                 triggered = false;
             }
             if (trigPos <= height - (bW * 30)) {
