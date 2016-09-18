@@ -7,13 +7,17 @@ void draw_grid(SDL_Renderer *renderer, int bW, int height) {
     int x, y;
     for (x = 0; x < 18; x++) {
         for (y = 0; y < 30; y++) {
-            if (PlayGrid[x][y] > 0) {
+            if (PlayGrid[x][y] != 0) {
                 switch (PlayGrid[x][y]) {
                     case 1:
                         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
                         break;
                     case 2:
                         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                        break;
+                    default:
+                        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                        PlayGrid[x][y]++;
                         break;
                 }
                 SDL_Rect targetRect;
@@ -38,6 +42,9 @@ bool move_down() {
     for (x = 0; x < 18; x++) {
         for (y = 0; y < 30; y++) {
             if (y > 0) {
+/*                if (PlayGrid[x][y] == -1) {
+                    PlayGrid[x][y] = 0;
+                }*/
                 PlayGrid[x][y-1] = PlayGrid[x][y];
                 PlayGrid[x][y] = 0;
             }
@@ -50,7 +57,11 @@ void add_targets(int score) {
     int x, val;
     x = rand() % 18;
     if (score >= 15) {
-        val = (rand() % 2) + 1;
+        if (rand() % 3 == 0) {
+            val = 2;
+        } else {
+            val = 1;
+        }
     } else {
         val = 1;
     }
@@ -62,7 +73,6 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
     static bool hasShotX  = false;
     static bool hasShotY  = false;
 
-    int step = width / 80;
     int wdBw = width / 18;
     int hdBw = height / 30;
     int bW   = 0;
@@ -71,6 +81,7 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
     } else {
         bW = wdBw;
     }
+    int step = (bW * 18) / 90;
 
     static int xC       = 0;
     static int yC       = 0;
@@ -121,6 +132,9 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
         hasShotY = false;
         if (PlayGrid[xC / bW][(yC - bW) / bW] > 0) {
             PlayGrid[xC / bW][(yC - bW) / bW]--;
+            if (PlayGrid[xC / bW][(yC - bW) / bW] == 0) {
+                PlayGrid[xC / bW][(yC - bW) / bW] -= 3;
+            }
             score++;
         }
     } else {
@@ -189,7 +203,7 @@ int play_game(SDL_Renderer *renderer, int width, int height, int *pscore) {
         SDL_RenderPresent(renderer);
     }
     *pscore = score;
-    if (SDL_GetTicks() - lastMove > 2000) {
+    if (SDL_GetTicks() - lastMove > 2500) {
         bool run;
         run = move_down();
         add_targets(score);
