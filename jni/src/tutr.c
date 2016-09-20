@@ -38,7 +38,7 @@ int play_tutr(SDL_Renderer *renderer, TTF_Font *font, int width, int height) {
     int txWidth, txHeight;
     SDL_QueryTexture(inst1, NULL, NULL, &txWidth, &txHeight);
     if (!inst2) {
-        inst2 = string_to_texture(renderer, font, "over the red square.", textColor);
+        inst2 = string_to_texture(renderer, font, "over the red square ", textColor);
     }
 
     SDL_Event event;
@@ -90,10 +90,10 @@ int play_tutr(SDL_Renderer *renderer, TTF_Font *font, int width, int height) {
         SDL_RenderFillRect(renderer, &targetRect);
 
         SDL_Rect dstRect;
-        dstRect.x = (width - txWidth) / 2;
+        dstRect.x = 0;
         dstRect.y = (height * 3) / 4;
-        dstRect.w = txWidth;
-        dstRect.h = txHeight;
+        dstRect.w = width;
+        dstRect.h = (int) (((float)width / (float)txWidth) * txHeight);
         SDL_RenderCopy(renderer, inst1, NULL, &dstRect);
 
         dstRect.y = dstRect.y + txHeight;
