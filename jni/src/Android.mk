@@ -12,7 +12,8 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include $(LOCAL_PATH)/../SDL_ttf
 LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	main.c \
 	game.c \
-	menu.c
+	menu.c \
+	tutr.c
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_ttf
 

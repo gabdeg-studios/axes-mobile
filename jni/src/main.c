@@ -8,6 +8,7 @@
 #include <string.h>
 #include "game.h"
 #include "menu.h"
+#include "tutr.h"
 
 //unsigned int LastTicks;
 int width;
@@ -93,6 +94,7 @@ int main(int argc, char *argv[]) {
     //0 = quit
     //1 = menu
     //2 = game
+    //3 = tutr
     int state = 1;
 
     int score  = 0;
@@ -122,6 +124,8 @@ int main(int argc, char *argv[]) {
             }
             state = do_menu(renderer, font, logoTxtr, width, height, &score, hscore);
             SDL_Delay(30);
+        } else if (state == 3) {
+            state = play_tutr(renderer, font, width, height);
         }
     }
     exit(0);

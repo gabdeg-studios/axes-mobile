@@ -11,10 +11,6 @@ struct Button {
     bool pd;
 };
 
-
-struct Button pB;
-struct Button qB;
-
 SDL_Texture *string_to_texture(SDL_Renderer *renderer,
         TTF_Font *font, char str[], SDL_Color textColor) {
     SDL_Surface *textSurface;
@@ -61,6 +57,14 @@ void render_menu(SDL_Renderer *renderer,
     dstRect.y = (height / 2) + txHeight;
     SDL_RenderCopy(renderer, textTexture, NULL, &dstRect);
 
+    textTexture = string_to_texture(renderer, font, "TUTORIAL", textColor);
+    SDL_QueryTexture(textTexture, NULL, NULL, &txWidth, &txHeight);
+
+    dstRect.x = (width - txWidth) / 2;
+    dstRect.y = (height / 2);
+    dstRect.w = dstRect.w * 2;
+    SDL_RenderCopy(renderer, textTexture, NULL, &dstRect);
+
     sprintf(scoreStr,  "Score:      %d", *score );
     sprintf(hscoreStr, "High Score: %d", hscore);
 
@@ -88,8 +92,9 @@ void render_menu(SDL_Renderer *renderer,
     dstRect.h = txHeight;
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderDrawRect(renderer, &dstRect);
-    dstRect.x = width / 4;
     dstRect.y = (height / 2) + txHeight;
+    SDL_RenderDrawRect(renderer, &dstRect);
+    dstRect.y = height / 2;
     SDL_RenderDrawRect(renderer, &dstRect);
 
     SDL_QueryTexture(logo, NULL, NULL, &txWidth, &txHeight);
@@ -118,6 +123,7 @@ int do_menu(SDL_Renderer *renderer,
     int touchY;
     struct Button pB;
     struct Button qB;
+    struct Button tB;
     if (!hasRendered) {
         render_menu(renderer, font, logo, width, height, score, hscore);
         hasRendered = true;
@@ -134,6 +140,12 @@ int do_menu(SDL_Renderer *renderer,
     qB.y2 = qB.y1 + (height / 20);
     qB.pd = false;
 
+    tB.x1 = width / 4;
+    tB.y1 = height / 2;
+    tB.x2 = tB.x1 + width / 2;
+    tB.y2 = tB.y1 + (height / 20);
+    tB.pd = false;
+
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -149,6 +161,9 @@ int do_menu(SDL_Renderer *renderer,
             } else if ((touchX > qB.x1 && touchX < qB.x2) &&
                     (touchY > qB.y1 && touchY < qB.y2)) {
                 qB.pd = true;
+            } else if ((touchX > tB.x1 && touchX < tB.x2) &&
+                    (touchY > tB.y1 && touchY < tB.y2)) {
+                tB.pd = true;
             }
         }
     }
@@ -160,6 +175,9 @@ int do_menu(SDL_Renderer *renderer,
         *score = 0;
         hasRendered = false;
         return 0;
+    } else if (tB.pd) {
+        hasRendered = false;
+        return 3;
     }
     return 1;
 }
